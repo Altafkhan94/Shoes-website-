@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Profile - Sole & Co</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="logo">SOLE<span>&</span>CO</div>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/user/cart">Cart</a>
+        <a href="/logout" class="logout-btn">Logout</a>
+    </nav>
+</header>
+
+<section class="profile-section">
+    <div class="profile-card">
+
+        <h2>My Profile</h2>
+
+        <form>
+            <label>Full Name</label>
+            <input type="text" placeholder="Altaf Khan">
+
+            <label>Email</label>
+            <input type="email" placeholder="altaf@gmail.com">
+
+            <label>Phone</label>
+            <input type="text" placeholder="9876543210">
+
+            <label>Address</label>
+            <textarea placeholder="Your Address"></textarea>
+
+            <button class="save-btn">Update Profile</button>
+        </form>
+
+    </div>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Users — Admin — Sole &amp; Co</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="admin-logo">SOLE<span>&amp;</span>CO<small>Admin Panel</small></div>
+    <p class="admin-nav-label">Main</p>
+    <a href="/admin/dashboard" class="admin-nav-item">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+      Dashboard
+    </a>
+    <a href="/admin/products" class="admin-nav-item">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+      Products
+    </a>
+    <a href="/admin/users" class="admin-nav-item active">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      Users
+    </a>
+    <a href="/admin/management" class="admin-nav-item">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      Management
+    </a>
+    <p class="admin-nav-label">Account</p>
+    <a href="/" class="admin-nav-item">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+      View Store
+    </a>
+    <a href="/admin/logout" class="admin-nav-item">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+      Sign Out
+    </a>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h2 class="admin-page-title">Users</h2>
+      <span style="font-size:13px;color:var(--muted);" th:text="${users.size()} + ' registered users'">3,417 registered users</span>
+    </div>
+
+    <div class="admin-content">
+
+      <div class="alert alert-success" th:if="${success}" th:text="${success}"></div>
+
+      <!-- Search -->
+      <div style="display:flex;gap:1rem;margin-bottom:1.5rem;align-items:center;flex-wrap:wrap;">
+        <div class="search-bar" style="flex:1;min-width:220px;max-width:360px;">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="text" placeholder="Search by name, email, username..." onkeyup="filterUsers()"/>
+        </div>
+        <select class="form-control" style="width:150px;" onchange="filterByStatus(this.value)">
+          <option value="">All Users</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+      </div>
+
+      <div class="table-wrapper">
+        <table id="usersTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>User</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Joined</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="user : ${users}">
+              <td class="td-mono" th:text="'#' + ${user.id}">001</td>
+              <td>
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div style="width:34px;height:34px;border-radius:50%;background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:center;font-family:var(--ff-display);font-size:13px;color:var(--gold);flex-shrink:0;"
+                       th:text="${#strings.toUpperCase(#strings.substring(user.firstName,0,1))}">A</div>
+                  <span class="td-name" th:text="${user.firstName + ' ' + user.lastName}">Arjun Sharma</span>
+                </div>
+              </td>
+              <td class="td-mono" th:text="${user.username}">arjun_s</td>
+              <td style="color:var(--silver);" th:text="${user.email}">arjun@example.com</td>
+              <td style="color:var(--muted);" th:text="${user.phone}">+91 98765 43210</td>
+              <td class="td-mono" th:text="${#temporals.format(user.createdAt,'dd MMM yyyy')}">01 Jan 2024</td>
+              <td>
+                <span th:class="${user.active} ? 'badge badge-active' : 'badge badge-inactive'"
+                      th:text="${user.active} ? 'Active' : 'Inactive'">Active</span>
+              </td>
+              <td>
+                <div style="display:flex;gap:6px;">
+                  <form th:action="@{/admin/users/toggle}" method="post" style="display:inline;">
+                    <input type="hidden" name="userId" th:value="${user.id}"/>
+                    <button type="submit" class="btn btn-outline btn-sm"
+                            th:text="${user.active} ? 'Deactivate' : 'Activate'">Deactivate</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(users)}">
+              <td colspan="8" style="text-align:center;padding:3rem;color:var(--muted);">No users found.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script>
+function filterUsers() {
+  const q = event.target.value.toLowerCase();
+  document.querySelectorAll('#usersTable tbody tr').forEach(row => {
+    row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+function filterByStatus(status) {
+  const url = new URL(window.location);
+  if (status) url.searchParams.set('status', status); else url.searchParams.delete('status');
+  window.location = url;
+}
+</script>
+</body>
+</html>

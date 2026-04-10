@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Profile — Sole &amp; Co</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a class="nav-brand" href="/">SOLE<span>&amp;</span>CO</a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/products">Collection</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="/profile" class="btn btn-ghost btn-sm">My Account</a>
+      <a href="/logout" class="btn btn-outline btn-sm">Sign Out</a>
+    </div>
+  </div>
+</nav>
+
+<section class="section">
+  <div class="container">
+
+    <div class="breadcrumb">
+      <a href="/">Home</a>
+      <span>/</span>
+      <span>My Profile</span>
+    </div>
+
+    <div class="profile-layout">
+
+      <!-- SIDEBAR -->
+      <div class="profile-sidebar">
+        <div class="card" style="text-align:center;">
+          <div class="avatar-ring" th:text="${#strings.toUpperCase(#strings.substring(session.user.firstName,0,1))}">A</div>
+          <h3 style="font-family:var(--ff-display);color:var(--white);font-size:1.1rem;" th:text="${session.user.firstName + ' ' + session.user.lastName}">Arjun Sharma</h3>
+          <p style="font-size:13px;color:var(--muted);margin-top:4px;" th:text="'@' + ${session.user.username}">@arjun_s</p>
+          <p style="font-size:11px;font-family:var(--ff-mono);color:var(--gold);margin-top:8px;">Member since 2024</p>
+        </div>
+
+        <div class="card" style="margin-top:1rem;">
+          <p class="card-title">Account</p>
+          <div style="display:flex;flex-direction:column;gap:0;">
+            <a href="/profile" style="display:block;padding:0.6rem 0;font-size:13px;color:var(--gold);border-bottom:1px solid rgba(255,255,255,0.05);">Edit Profile</a>
+            <a href="/profile/change-password" style="display:block;padding:0.6rem 0;font-size:13px;color:var(--silver);">Change Password</a>
+            <a href="/orders" style="display:block;padding:0.6rem 0;font-size:13px;color:var(--silver);">My Orders</a>
+            <a href="/logout" style="display:block;padding:0.6rem 0;font-size:13px;color:var(--red);">Sign Out</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN CONTENT -->
+      <div>
+        <div class="card">
+          <p class="card-title">Personal Information</p>
+
+          <div class="alert alert-success" th:if="${success}" th:text="${success}"></div>
+          <div class="alert alert-error"   th:if="${error}"   th:text="${error}"></div>
+
+          <form th:action="@{/profile/edit}" method="post">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+              <div class="form-group">
+                <label class="form-label">First Name</label>
+                <input class="form-control" type="text" name="firstName" required th:value="${session.user.firstName}" placeholder="Arjun"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Last Name</label>
+                <input class="form-control" type="text" name="lastName" required th:value="${session.user.lastName}" placeholder="Sharma"/>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Username</label>
+              <input class="form-control" type="text" name="username" required th:value="${session.user.username}" placeholder="arjun_sharma"/>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <input class="form-control" type="email" name="email" required th:value="${session.user.email}" placeholder="arjun@example.com"/>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Phone Number</label>
+              <input class="form-control" type="tel" name="phone" th:value="${session.user.phone}" placeholder="+91 98765 43210"/>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Delivery Address</label>
+              <textarea class="form-control" name="address" placeholder="Your default delivery address..." th:text="${session.user.address}"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Shoe Size Preference</label>
+              <select class="form-control" name="preferredSize">
+                <option value="">Not set</option>
+                <option th:each="s : ${#numbers.sequence(5,13)}" th:value="${s}" th:text="'UK ' + ${s}" th:selected="${session.user.preferredSize == s}">UK 9</option>
+              </select>
+            </div>
+
+            <hr class="divider"/>
+
+            <div style="display:flex;gap:1rem;">
+              <button type="submit" class="btn btn-gold">Save Changes</button>
+              <a href="/" class="btn btn-outline">Cancel</a>
+            </div>
+          </form>
+        </div>
+
+        <!-- Order history summary -->
+        <div class="card" style="margin-top:1.5rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;" class="card-title">
+            <span>Recent Orders</span>
+            <a href="/orders" class="btn btn-ghost btn-sm" style="font-size:12px;">View All →</a>
+          </div>
+          <div th:if="${#lists.isEmpty(recentOrders)}" style="text-align:center;padding:2rem;color:var(--muted);font-size:13px;">
+            No orders yet. <a href="/products" style="color:var(--gold);">Start shopping →</a>
+          </div>
+          <div th:each="order : ${recentOrders}" class="order-item">
+            <div class="order-thumb">
+              <img th:src="${order.productImageUrl}" th:alt="${order.productName}" onerror="this.style.display='none'"/>
+            </div>
+            <div style="flex:1;">
+              <p style="font-size:13px;color:var(--white);font-weight:500;" th:text="${order.productName}">Nike Air Max 270</p>
+              <p style="font-size:11px;color:var(--muted);" th:text="'Size: ' + ${order.size} + ' · ' + ${order.date}">Size: UK 9 · 01 Jan 2024</p>
+            </div>
+            <div style="text-align:right;">
+              <p style="font-size:13px;color:var(--cream);" th:text="'₹' + ${order.amount}">₹12,999</p>
+              <span class="badge badge-active" style="font-size:10px;" th:text="${order.status}">Delivered</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <p>© 2025 Sole &amp; Co. All rights reserved.</p>
+      <a href="/" style="color:var(--gold);">← Back to Home</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

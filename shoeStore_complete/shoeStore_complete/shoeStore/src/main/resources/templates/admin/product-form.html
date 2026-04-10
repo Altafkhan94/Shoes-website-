@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title th:text="${product?.id != null} ? 'Edit Product' : 'Add Product' + ' — Admin'">Product Form — Admin</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="admin-logo">SOLE<span>&amp;</span>CO<small>Admin Panel</small></div>
+    <p class="admin-nav-label">Main</p>
+    <a href="/admin/dashboard" class="admin-nav-item">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+      Dashboard
+    </a>
+    <a href="/admin/products" class="admin-nav-item active">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+      Products
+    </a>
+    <a href="/admin/users" class="admin-nav-item">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      Users
+    </a>
+    <a href="/admin/management" class="admin-nav-item">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      Management
+    </a>
+    <p class="admin-nav-label">Account</p>
+    <a href="/" class="admin-nav-item">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+      View Store
+    </a>
+    <a href="/admin/logout" class="admin-nav-item">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+      Sign Out
+    </a>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <div style="display:flex;align-items:center;gap:1rem;">
+        <a href="/admin/products" class="btn btn-ghost btn-sm">← Back</a>
+        <h2 class="admin-page-title" th:text="${product?.id != null} ? 'Edit Product' : 'Add New Shoe'">Add New Shoe</h2>
+      </div>
+    </div>
+
+    <div class="admin-content">
+      <div class="alert alert-error" th:if="${error}" th:text="${error}"></div>
+
+      <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:2rem;align-items:start;">
+
+        <!-- FORM -->
+        <form th:action="${product?.id != null} ? @{/admin/products/edit} : @{/admin/products/add}" method="post">
+          <input type="hidden" name="id" th:value="${product?.id}"/>
+
+          <div class="card">
+            <p class="card-title">Product Information</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+              <div class="form-group">
+                <label class="form-label">Product Name *</label>
+                <input class="form-control" type="text" name="name" placeholder="e.g. Air Max 270 React" required th:value="${product?.name}"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Brand *</label>
+                <input class="form-control" type="text" name="brand" placeholder="e.g. Nike" required th:value="${product?.brand}"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Description</label>
+              <textarea class="form-control" name="description" placeholder="Describe the shoe — materials, feel, best use case..." th:text="${product?.description}"></textarea>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+              <div class="form-group">
+                <label class="form-label">Category *</label>
+                <select class="form-control" name="category" required>
+                  <option value="">Select category...</option>
+                  <option value="sneakers" th:selected="${product?.category == 'sneakers'}">Sneakers</option>
+                  <option value="formal"   th:selected="${product?.category == 'formal'}">Formal</option>
+                  <option value="boots"    th:selected="${product?.category == 'boots'}">Boots</option>
+                  <option value="sandals"  th:selected="${product?.category == 'sandals'}">Sandals</option>
+                  <option value="sports"   th:selected="${product?.category == 'sports'}">Sports</option>
+                  <option value="casual"   th:selected="${product?.category == 'casual'}">Casual</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Gender</label>
+                <select class="form-control" name="gender">
+                  <option value="unisex"  th:selected="${product?.gender == 'unisex'}">Unisex</option>
+                  <option value="men"     th:selected="${product?.gender == 'men'}">Men</option>
+                  <option value="women"   th:selected="${product?.gender == 'women'}">Women</option>
+                  <option value="kids"    th:selected="${product?.gender == 'kids'}">Kids</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:1.5rem;">
+            <p class="card-title">Pricing &amp; Inventory</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;">
+              <div class="form-group">
+                <label class="form-label">Price (₹) *</label>
+                <input class="form-control" type="number" name="price" min="0" step="0.01" placeholder="12999" required th:value="${product?.price}"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Original Price (₹)</label>
+                <input class="form-control" type="number" name="originalPrice" min="0" step="0.01" placeholder="15999" th:value="${product?.originalPrice}"/>
+                <p style="font-size:11px;color:var(--muted);margin-top:4px;">For showing sale price</p>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Stock *</label>
+                <input class="form-control" type="number" name="stock" min="0" placeholder="50" required th:value="${product?.stock}"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Available Sizes (comma separated)</label>
+              <input class="form-control" type="text" name="sizes" placeholder="6, 7, 8, 9, 10, 11" th:value="${product?.sizes}"/>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:1.5rem;">
+            <p class="card-title">Media &amp; Status</p>
+            <div class="form-group">
+              <label class="form-label">Image URL</label>
+              <input class="form-control" type="url" name="imageUrl" placeholder="https://..." th:value="${product?.imageUrl}" oninput="previewImage(this.value)"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Color</label>
+              <input class="form-control" type="text" name="color" placeholder="e.g. Triple Black, White/Red" th:value="${product?.color}"/>
+            </div>
+            <div style="display:flex;gap:2rem;margin-top:0.5rem;">
+              <label style="display:flex;align-items:center;gap:8px;font-size:14px;color:var(--silver);cursor:pointer;">
+                <input type="checkbox" name="active" value="true" th:checked="${product?.active != false}" style="accent-color:var(--gold);width:16px;height:16px;"/>
+                Active (visible to customers)
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:14px;color:var(--silver);cursor:pointer;">
+                <input type="checkbox" name="isNew" value="true" th:checked="${product?.isNew}" style="accent-color:var(--gold);width:16px;height:16px;"/>
+                Mark as New Arrival
+              </label>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:1rem;margin-top:1.5rem;">
+            <button type="submit" class="btn btn-gold btn-lg" th:text="${product?.id != null} ? 'Save Changes' : 'Add Product'">Add Product</button>
+            <a href="/admin/products" class="btn btn-outline btn-lg">Cancel</a>
+          </div>
+        </form>
+
+        <!-- PREVIEW SIDEBAR -->
+        <div style="position:sticky;top:80px;">
+          <div class="card">
+            <p class="card-title">Preview</p>
+            <div style="aspect-ratio:4/3;background:var(--ink);border-radius:var(--radius);overflow:hidden;margin-bottom:1rem;">
+              <img id="previewImg" src="" alt="Preview" style="width:100%;height:100%;object-fit:cover;display:none;"/>
+              <div id="previewPlaceholder" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;">Image preview</div>
+            </div>
+            <p style="font-family:var(--ff-display);color:var(--white);font-size:1.05rem;" id="previewName">Product Name</p>
+            <p style="font-size:12px;color:var(--gold);margin-top:4px;" id="previewBrand">Brand</p>
+          </div>
+
+          <div class="card" style="margin-top:1rem;">
+            <p style="font-size:12px;color:var(--muted);line-height:1.7;">
+              ✓ Ensure image URL is publicly accessible<br/>
+              ✓ Sizes should be comma-separated (e.g. 6, 7, 8)<br/>
+              ✓ Set Original Price only for sale items<br/>
+              ✓ Inactive products won't appear in the store
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+function previewImage(url) {
+  const img = document.getElementById('previewImg');
+  const ph = document.getElementById('previewPlaceholder');
+  if (url) { img.src = url; img.style.display = 'block'; ph.style.display = 'none'; }
+  else { img.style.display = 'none'; ph.style.display = 'flex'; }
+}
+document.querySelector('[name="name"]')?.addEventListener('input', function() {
+  document.getElementById('previewName').textContent = this.value || 'Product Name';
+});
+document.querySelector('[name="brand"]')?.addEventListener('input', function() {
+  document.getElementById('previewBrand').textContent = this.value || 'Brand';
+});
+// Init if editing
+const existingImg = document.querySelector('[name="imageUrl"]')?.value;
+if (existingImg) previewImage(existingImg);
+</script>
+</body>
+</html>

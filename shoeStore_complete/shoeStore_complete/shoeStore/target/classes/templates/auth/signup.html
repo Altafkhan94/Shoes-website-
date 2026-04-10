@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Create Account — Sole &amp; Co</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<div class="auth-page">
+  <div class="auth-panel-left">
+    <div class="auth-visual-text">
+      <p class="display-xl">Your<br/>Next<br/>Step.</p>
+      <p style="color:var(--muted);font-size:14px;max-width:320px;line-height:1.7;margin-top:1.5rem;">Join thousands of shoe enthusiasts who trust Sole &amp; Co for their footwear. Members get early access to new drops and exclusive deals.</p>
+      <div style="margin-top:3rem;padding:1.5rem;background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.15);border-radius:var(--radius);">
+        <p class="label" style="margin-bottom:0.75rem;">Member Benefits</p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:0.5rem;">
+          <li style="font-size:13px;color:var(--silver);">🎯 Early access to new arrivals</li>
+          <li style="font-size:13px;color:var(--silver);">💸 Exclusive member-only discounts</li>
+          <li style="font-size:13px;color:var(--silver);">📦 Order tracking &amp; history</li>
+          <li style="font-size:13px;color:var(--silver);">🔔 Restock alerts for your favourites</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-panel-right" style="max-width:520px;">
+    <p class="auth-logo">SOLE<span>&amp;</span>CO</p>
+    <h1 class="auth-title">Create account.</h1>
+    <p class="auth-sub">Join the community. It's free.</p>
+
+    <div class="alert alert-error" th:if="${error}" th:text="${error}"></div>
+
+    <form th:action="@{/signup}" method="post">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+        <div class="form-group">
+          <label class="form-label" for="firstName">First Name</label>
+          <input class="form-control" type="text" id="firstName" name="firstName" placeholder="Arjun" required th:value="${formData?.firstName}"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="lastName">Last Name</label>
+          <input class="form-control" type="text" id="lastName" name="lastName" placeholder="Sharma" required th:value="${formData?.lastName}"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="username">Username</label>
+        <input class="form-control" type="text" id="username" name="username" placeholder="arjun_sharma" required th:value="${formData?.username}"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="email">Email Address</label>
+        <input class="form-control" type="email" id="email" name="email" placeholder="arjun@example.com" required th:value="${formData?.email}"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="phone">Phone Number</label>
+        <input class="form-control" type="tel" id="phone" name="phone" placeholder="+91 98765 43210" th:value="${formData?.phone}"/>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input class="form-control" type="password" id="password" name="password" placeholder="Min. 8 characters" required minlength="8"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="confirmPassword">Confirm Password</label>
+          <input class="form-control" type="password" id="confirmPassword" name="confirmPassword" placeholder="Repeat password" required/>
+        </div>
+      </div>
+      <div style="margin-bottom:1.5rem;">
+        <label style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--muted);cursor:pointer;">
+          <input type="checkbox" name="agree" required style="margin-top:3px;accent-color:var(--gold);"/>
+          <span>I agree to the <a href="#" style="color:var(--gold);">Terms of Service</a> and <a href="#" style="color:var(--gold);">Privacy Policy</a></span>
+        </label>
+      </div>
+      <button type="submit" class="btn btn-gold btn-block btn-lg">Create Account</button>
+    </form>
+
+    <div class="auth-footer mt-3">
+      Already have an account? <a th:href="@{/login}">Sign in →</a>
+    </div>
+    <div class="auth-footer mt-2">
+      <a th:href="@{/}" style="color:var(--muted);">← Back to store</a>
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelector('form').addEventListener('submit', function(e) {
+  const pw = document.getElementById('password').value;
+  const cpw = document.getElementById('confirmPassword').value;
+  if (pw !== cpw) {
+    e.preventDefault();
+    alert('Passwords do not match.');
+  }
+});
+</script>
+</body>
+</html>

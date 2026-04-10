@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Collection — Sole &amp; Co</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a class="nav-brand" href="/">SOLE<span>&amp;</span>CO</a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/products" class="active">Collection</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a th:if="${session.user == null}" href="/login" class="btn btn-outline btn-sm">Sign In</a>
+      <a th:if="${session.user == null}" href="/signup" class="btn btn-gold btn-sm">Get Started</a>
+      <a th:if="${session.user != null}" href="/profile" class="btn btn-ghost btn-sm">My Account</a>
+      <a th:if="${session.user != null}" href="/logout" class="btn btn-outline btn-sm">Sign Out</a>
+    </div>
+  </div>
+</nav>
+
+<div class="section">
+  <div class="container">
+
+    <!-- Page header -->
+    <div style="margin-bottom:3rem;">
+      <p class="label mb-1">Explore</p>
+      <h1 style="font-size:clamp(2rem,4vw,3.5rem);color:var(--white);">The Collection</h1>
+      <p style="color:var(--muted);margin-top:0.5rem;" th:text="${totalCount} + ' styles available'">200 styles available</p>
+    </div>
+
+    <!-- Filter & Search bar -->
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center;margin-bottom:2.5rem;">
+      <div class="search-bar" style="flex:1;min-width:200px;max-width:360px;">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input type="text" placeholder="Search shoes, brands..." th:value="${searchTerm}" id="searchInput"/>
+      </div>
+      <div class="filter-bar" style="margin:0;padding:0;border:none;flex:1;display:flex;flex-wrap:wrap;">
+        <button class="filter-chip active" onclick="filterCategory(this,'')">All</button>
+        <button class="filter-chip" onclick="filterCategory(this,'sneakers')">Sneakers</button>
+        <button class="filter-chip" onclick="filterCategory(this,'formal')">Formal</button>
+        <button class="filter-chip" onclick="filterCategory(this,'boots')">Boots</button>
+        <button class="filter-chip" onclick="filterCategory(this,'sandals')">Sandals</button>
+        <button class="filter-chip" onclick="filterCategory(this,'sports')">Sports</button>
+      </div>
+      <select class="form-control" style="width:160px;padding:0.65rem 1rem;" onchange="sortProducts(this.value)">
+        <option value="">Sort: Default</option>
+        <option value="price_asc">Price: Low → High</option>
+        <option value="price_desc">Price: High → Low</option>
+        <option value="newest">Newest First</option>
+      </select>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="product-grid" id="productGrid">
+      <div class="product-card" th:each="product : ${products}">
+        <div class="product-img">
+          <img th:src="${product.imageUrl}" th:alt="${product.name}" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=70'"/>
+          <span class="product-badge badge-new" th:if="${product.isNew}">New</span>
+          <span class="product-badge badge-sale" th:if="${product.onSale}">Sale</span>
+        </div>
+        <div class="product-body">
+          <p class="product-brand" th:text="${product.brand}">Brand</p>
+          <h3 class="product-name" th:text="${product.name}">Shoe Name</h3>
+          <p style="font-size:12px;color:var(--muted);" th:text="${product.category}">Category</p>
+          <div class="product-sizes mt-2">
+            <span class="size-chip" th:each="size : ${product.sizes}" th:text="${size}">7</span>
+          </div>
+          <div class="product-meta">
+            <div>
+              <span class="product-price" th:text="'₹' + ${#numbers.formatDecimal(product.price,1,2)}">₹4,999</span>
+              <span class="product-price-old" th:if="${product.originalPrice != null}" th:text="'₹' + ${#numbers.formatDecimal(product.originalPrice,1,2)}"></span>
+            </div>
+            <button class="btn btn-gold btn-sm" th:onclick="'addToCart(' + ${product.id} + ')'">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fallback if empty -->
+      <div th:if="${#lists.isEmpty(products)}" style="grid-column:1/-1;">
+        <div class="empty-state">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+          <h3>No Products Found</h3>
+          <p>Try adjusting your filters or search term.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" th:if="${totalPages > 1}">
+      <button class="page-btn" th:classappend="${currentPage == 0} ? 'disabled'" th:onclick="'goToPage(' + (${currentPage} - 1) + ')'">←</button>
+      <button class="page-btn" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+              th:classappend="${i == currentPage} ? 'active'"
+              th:text="${i + 1}"
+              th:onclick="'goToPage(' + ${i} + ')'">1</button>
+      <button class="page-btn" th:classappend="${currentPage == totalPages - 1} ? 'disabled'" th:onclick="'goToPage(' + (${currentPage} + 1) + ')'">→</button>
+    </div>
+
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <p>© 2025 Sole &amp; Co. All rights reserved.</p>
+      <a href="/" style="color:var(--gold);">← Back to Home</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+function filterCategory(el, cat) {
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  const url = new URL(window.location);
+  if (cat) url.searchParams.set('category', cat);
+  else url.searchParams.delete('category');
+  window.location = url;
+}
+function sortProducts(val) {
+  const url = new URL(window.location);
+  if (val) url.searchParams.set('sort', val);
+  else url.searchParams.delete('sort');
+  window.location = url;
+}
+function goToPage(p) {
+  const url = new URL(window.location);
+  url.searchParams.set('page', p);
+  window.location = url;
+}
+function addToCart(id) {
+  fetch('/cart/add/' + id, {method:'POST'})
+    .then(() => {
+      const btn = event.target;
+      btn.textContent = '✓ Added';
+      btn.style.background = '#27ae60';
+      setTimeout(() => { btn.textContent = 'Add to Cart'; btn.style.background = ''; }, 1500);
+    });
+}
+</script>
+</body>
+</html>

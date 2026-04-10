@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Management — Admin — Sole &amp; Co</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="admin-logo">SOLE<span>&amp;</span>CO<small>Admin Panel</small></div>
+    <p class="admin-nav-label">Main</p>
+    <a href="/admin/dashboard" class="admin-nav-item">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+      Dashboard
+    </a>
+    <a href="/admin/products" class="admin-nav-item">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+      Products
+    </a>
+    <a href="/admin/users" class="admin-nav-item">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      Users
+    </a>
+    <a href="/admin/management" class="admin-nav-item active">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      Management
+    </a>
+    <p class="admin-nav-label">Account</p>
+    <a href="/" class="admin-nav-item">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+      View Store
+    </a>
+    <a href="/admin/logout" class="admin-nav-item">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+      Sign Out
+    </a>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h2 class="admin-page-title">Management</h2>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- Tab navigation -->
+      <div style="display:flex;gap:0;border-bottom:1px solid rgba(255,255,255,0.07);margin-bottom:2rem;">
+        <button class="tab-btn active" onclick="showTab('orders',this)" style="padding:0.75rem 1.5rem;background:none;border:none;border-bottom:2px solid var(--gold);color:var(--cream);font-family:var(--ff-body);font-size:13px;cursor:pointer;margin-bottom:-1px;">Orders</button>
+        <button class="tab-btn" onclick="showTab('settings',this)" style="padding:0.75rem 1.5rem;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);font-family:var(--ff-body);font-size:13px;cursor:pointer;margin-bottom:-1px;">Store Settings</button>
+        <button class="tab-btn" onclick="showTab('admins',this)" style="padding:0.75rem 1.5rem;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);font-family:var(--ff-body);font-size:13px;cursor:pointer;margin-bottom:-1px;">Admin Accounts</button>
+      </div>
+
+      <!-- ORDERS TAB -->
+      <div id="tab-orders">
+        <div style="display:flex;gap:1rem;margin-bottom:1.5rem;align-items:center;flex-wrap:wrap;">
+          <div class="search-bar" style="flex:1;min-width:220px;max-width:360px;">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <input type="text" placeholder="Search orders..." onkeyup="filterOrders()"/>
+          </div>
+          <select class="form-control" style="width:160px;" onchange="filterOrderStatus(this.value)">
+            <option value="">All Statuses</option>
+            <option value="processing">Processing</option>
+            <option value="shipped">Shipped</option>
+            <option value="delivered">Delivered</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+
+        <div class="table-wrapper">
+          <table id="ordersTable">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Product</th>
+                <th>Size</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Update</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="order : ${orders}">
+                <td class="td-mono" th:text="'#' + ${order.id}">#1042</td>
+                <td class="td-name" th:text="${order.userName}">Arjun Sharma</td>
+                <td style="color:var(--silver);" th:text="${order.productName}">Nike Air Max 270</td>
+                <td style="color:var(--muted);" th:text="${order.size}">UK 9</td>
+                <td style="color:var(--cream);" th:text="'₹' + ${order.amount}">₹12,999</td>
+                <td class="td-mono" th:text="${#temporals.format(order.createdAt,'dd MMM yy')}">01 Jan 24</td>
+                <td>
+                  <span th:class="${order.status == 'Delivered'} ? 'badge badge-active' : (${order.status == 'Cancelled'} ? 'badge badge-inactive' : 'badge badge-pending')"
+                        th:text="${order.status}">Processing</span>
+                </td>
+                <td>
+                  <form th:action="@{/admin/orders/status}" method="post" style="display:flex;gap:6px;">
+                    <input type="hidden" name="orderId" th:value="${order.id}"/>
+                    <select class="form-control" name="status" style="padding:4px 8px;font-size:12px;width:130px;">
+                      <option value="processing" th:selected="${order.status=='processing'}">Processing</option>
+                      <option value="shipped"    th:selected="${order.status=='shipped'}">Shipped</option>
+                      <option value="delivered"  th:selected="${order.status=='delivered'}">Delivered</option>
+                      <option value="cancelled"  th:selected="${order.status=='cancelled'}">Cancelled</option>
+                    </select>
+                    <button type="submit" class="btn btn-gold btn-sm">Save</button>
+                  </form>
+                </td>
+              </tr>
+              <tr th:if="${#lists.isEmpty(orders)}">
+                <td class="td-mono">#1042</td>
+                <td class="td-name">Arjun Sharma</td>
+                <td style="color:var(--silver)">Nike Air Max 270</td>
+                <td style="color:var(--muted)">UK 9</td>
+                <td style="color:var(--cream)">₹12,999</td>
+                <td class="td-mono">01 Jan 24</td>
+                <td><span class="badge badge-active">Delivered</span></td>
+                <td><span style="color:var(--muted);font-size:12px;">—</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SETTINGS TAB -->
+      <div id="tab-settings" style="display:none;">
+        <form th:action="@{/admin/settings}" method="post">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+            <div class="card">
+              <p class="card-title">Store Information</p>
+              <div class="form-group">
+                <label class="form-label">Store Name</label>
+                <input class="form-control" type="text" name="storeName" value="Sole &amp; Co"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Store Email</label>
+                <input class="form-control" type="email" name="storeEmail" value="hello@soleandco.in"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Store Phone</label>
+                <input class="form-control" type="tel" name="storePhone" value="+91 98765 43210"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Store Address</label>
+                <textarea class="form-control" name="storeAddress" style="min-height:80px;">42, Linking Road, Bandra West, Mumbai</textarea>
+              </div>
+            </div>
+            <div class="card">
+              <p class="card-title">Shipping &amp; Policy</p>
+              <div class="form-group">
+                <label class="form-label">Free Shipping Threshold (₹)</label>
+                <input class="form-control" type="number" name="freeShippingMin" value="2000"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Standard Shipping Cost (₹)</label>
+                <input class="form-control" type="number" name="shippingCost" value="149"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Return Window (days)</label>
+                <input class="form-control" type="number" name="returnDays" value="30"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Currency</label>
+                <select class="form-control" name="currency">
+                  <option value="INR" selected>INR (₹)</option>
+                  <option value="USD">USD ($)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:1.5rem;">
+            <button type="submit" class="btn btn-gold">Save Settings</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- ADMINS TAB -->
+      <div id="tab-admins" style="display:none;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;">
+          <div>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr><th>Username</th><th>Email</th><th>Role</th><th>Actions</th></tr>
+                </thead>
+                <tbody>
+                  <tr th:each="admin : ${admins}">
+                    <td class="td-name" th:text="${admin.username}">superadmin</td>
+                    <td style="color:var(--silver);" th:text="${admin.email}">admin@soleandco.in</td>
+                    <td><span class="badge badge-active" th:text="${admin.role}">Super Admin</span></td>
+                    <td>
+                      <form th:action="@{/admin/admins/delete}" method="post">
+                        <input type="hidden" name="adminId" th:value="${admin.id}"/>
+                        <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                      </form>
+                    </td>
+                  </tr>
+                  <tr th:if="${#lists.isEmpty(admins)}">
+                    <td class="td-name">superadmin</td>
+                    <td style="color:var(--silver)">admin@soleandco.in</td>
+                    <td><span class="badge badge-active">Super Admin</span></td>
+                    <td>—</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <p class="card-title">Add Admin Account</p>
+            <form th:action="@{/admin/admins/add}" method="post">
+              <div class="form-group">
+                <label class="form-label">Username</label>
+                <input class="form-control" type="text" name="username" placeholder="newadmin" required/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email</label>
+                <input class="form-control" type="email" name="email" placeholder="admin@soleandco.in" required/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Password</label>
+                <input class="form-control" type="password" name="password" placeholder="••••••••" required/>
+              </div>
+              <button type="submit" class="btn btn-gold btn-block">Create Admin</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script>
+function showTab(name, btn) {
+  ['orders','settings','admins'].forEach(t => {
+    document.getElementById('tab-' + t).style.display = t === name ? 'block' : 'none';
+  });
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.style.borderBottomColor = 'transparent';
+    b.style.color = 'var(--muted)';
+  });
+  btn.style.borderBottomColor = 'var(--gold)';
+  btn.style.color = 'var(--cream)';
+}
+function filterOrders() {
+  const q = event.target.value.toLowerCase();
+  document.querySelectorAll('#ordersTable tbody tr').forEach(r => {
+    r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+function filterOrderStatus(s) {
+  const url = new URL(window.location);
+  if (s) url.searchParams.set('status', s); else url.searchParams.delete('status');
+  window.location = url;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard — Sole &amp; Co</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<div class="admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar">
+    <div class="admin-logo">
+      SOLE<span>&amp;</span>CO
+      <small>Admin Panel</small>
+    </div>
+
+    <p class="admin-nav-label">Main</p>
+    <a href="/admin/dashboard" class="admin-nav-item active">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+      Dashboard
+    </a>
+    <a href="/admin/products" class="admin-nav-item">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+      Products
+    </a>
+    <a href="/admin/users" class="admin-nav-item">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      Users
+    </a>
+    <a href="/admin/management" class="admin-nav-item">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      Management
+    </a>
+
+    <p class="admin-nav-label">Account</p>
+    <a href="/" class="admin-nav-item">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+      View Store
+    </a>
+    <a href="/admin/logout" class="admin-nav-item">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+      Sign Out
+    </a>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h2 class="admin-page-title">Dashboard</h2>
+      <div style="display:flex;align-items:center;gap:1rem;">
+        <span style="font-size:13px;color:var(--muted);" th:text="'Welcome, ' + ${session.admin.username}">Welcome, Admin</span>
+        <div style="width:34px;height:34px;border-radius:50%;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);display:flex;align-items:center;justify-content:center;font-family:var(--ff-display);color:var(--gold);font-size:14px;">A</div>
+      </div>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <p class="stat-card-label">Total Revenue</p>
+          <p class="stat-card-value" th:text="'₹' + ${#numbers.formatDecimal(totalRevenue, 1, 0)}">₹4,82,300</p>
+          <p class="stat-card-change up">↑ 12.4% this month</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-card-label">Total Orders</p>
+          <p class="stat-card-value" th:text="${totalOrders}">1,284</p>
+          <p class="stat-card-change up">↑ 8.1% this month</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-card-label">Registered Users</p>
+          <p class="stat-card-value" th:text="${totalUsers}">3,417</p>
+          <p class="stat-card-change up">↑ 5.6% this month</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-card-label">Products Listed</p>
+          <p class="stat-card-value" th:text="${totalProducts}">214</p>
+          <p class="stat-card-change down">↓ 2 removed today</p>
+        </div>
+      </div>
+
+      <!-- Content grid -->
+      <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:1.5rem;margin-top:1.5rem;">
+
+        <!-- Recent Orders -->
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;" class="card-title">
+            <span>Recent Orders</span>
+            <a href="/admin/management" class="btn btn-ghost btn-sm" style="font-size:12px;">View All →</a>
+          </div>
+          <div class="table-wrapper" style="border:none;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer</th>
+                  <th>Product</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="order : ${recentOrders}">
+                  <td class="td-mono" th:text="'#' + ${order.id}">#1042</td>
+                  <td class="td-name" th:text="${order.userName}">Arjun Sharma</td>
+                  <td style="color:var(--silver);" th:text="${order.productName}">Nike Air Max</td>
+                  <td style="color:var(--cream);" th:text="'₹' + ${order.amount}">₹8,499</td>
+                  <td><span class="badge badge-active" th:text="${order.status}">Delivered</span></td>
+                </tr>
+                <!-- Fallback rows -->
+                <tr th:if="${#lists.isEmpty(recentOrders)}">
+                  <td class="td-mono">#1042</td>
+                  <td class="td-name">Arjun Sharma</td>
+                  <td style="color:var(--silver)">Nike Air Max 270</td>
+                  <td style="color:var(--cream)">₹12,999</td>
+                  <td><span class="badge badge-active">Delivered</span></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(recentOrders)}">
+                  <td class="td-mono">#1041</td>
+                  <td class="td-name">Priya Nair</td>
+                  <td style="color:var(--silver)">Adidas Stan Smith</td>
+                  <td style="color:var(--cream)">₹7,499</td>
+                  <td><span class="badge badge-pending">Shipping</span></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(recentOrders)}">
+                  <td class="td-mono">#1040</td>
+                  <td class="td-name">Rahul Desai</td>
+                  <td style="color:var(--silver)">Puma RS-X</td>
+                  <td style="color:var(--cream)">₹6,299</td>
+                  <td><span class="badge badge-pending">Processing</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Top Products -->
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;" class="card-title">
+            <span>Top Products</span>
+            <a href="/admin/products" class="btn btn-ghost btn-sm" style="font-size:12px;">Manage →</a>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:1rem;">
+            <div th:each="product, iter : ${topProducts}" style="display:flex;align-items:center;gap:1rem;">
+              <span style="font-family:var(--ff-mono);font-size:11px;color:var(--muted);width:16px;" th:text="${iter.index + 1}">1</span>
+              <div style="flex:1;">
+                <p style="font-size:13px;color:var(--white);font-weight:500;" th:text="${product.name}">Nike Air Max</p>
+                <p style="font-size:11px;color:var(--muted);" th:text="${product.soldCount} + ' sold'">142 sold</p>
+              </div>
+              <span style="font-size:13px;color:var(--gold);" th:text="'₹' + ${product.price}">₹12,999</span>
+            </div>
+            <!-- Fallback -->
+            <div th:if="${#lists.isEmpty(topProducts)}" style="display:flex;align-items:center;gap:1rem;" th:each="i : ${#numbers.sequence(1,5)}">
+              <span style="font-family:var(--ff-mono);font-size:11px;color:var(--muted);width:16px;" th:text="${i}">1</span>
+              <div style="flex:1;">
+                <p style="font-size:13px;color:var(--white);font-weight:500;">Nike Air Max 270</p>
+                <p style="font-size:11px;color:var(--muted);">142 sold</p>
+              </div>
+              <span style="font-size:13px;color:var(--gold);">₹12,999</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Quick actions -->
+      <div style="display:flex;gap:1rem;margin-top:1.5rem;flex-wrap:wrap;">
+        <a href="/admin/product-form" class="btn btn-gold">+ Add New Shoe</a>
+        <a href="/admin/products" class="btn btn-outline">Manage Inventory</a>
+        <a href="/admin/users" class="btn btn-outline">View All Users</a>
+      </div>
+
+    </div>
+  </main>
+
+</div>
+</body>
+</html>

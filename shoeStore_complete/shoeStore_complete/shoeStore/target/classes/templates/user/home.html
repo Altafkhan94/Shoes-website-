@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sole & Co</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+    <div class="logo">SOLE<span>&</span>CO</div>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/user/cart">Cart</a>
+        <a href="/user/profile">Profile</a>
+        <a href="/logout" class="logout-btn">Logout</a>
+    </nav>
+</header>
+
+<!-- HERO SECTION -->
+<section class="hero">
+    <div class="hero-text">
+        <h1>Step Into Luxury</h1>
+        <p>Discover premium shoes crafted for comfort & style.</p>
+        <a href="#products" class="shop-btn">Shop Now</a>
+    </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products" class="products">
+    <h2>Featured Shoes</h2>
+
+    <div class="product-grid">
+
+        <div class="product-card">
+            <img src="/images/shoe1.png">
+            <h3>Nike Air Max</h3>
+            <p class="price">₹5,499</p>
+            <button>Add to Cart</button>
+        </div>
+
+        <div class="product-card">
+            <img src="/images/shoe2.png">
+            <h3>Adidas Ultraboost</h3>
+            <p class="price">₹6,299</p>
+            <button>Add to Cart</button>
+        </div>
+
+        <div class="product-card">
+            <img src="/images/shoe3.png">
+            <h3>Puma Runner</h3>
+            <p class="price">₹3,999</p>
+            <button>Add to Cart</button>
+        </div>
+
+        <div class="product-card">
+            <img src="/images/shoe4.png">
+            <h3>Reebok Classic</h3>
+            <p class="price">₹4,499</p>
+            <button>Add to Cart</button>
+        </div>
+
+    </div>
+</section>
+
+<footer class="footer">
+    © 2026 Sole & Co — Premium Footwear
+</footer>
+
+</body>
+</html>
